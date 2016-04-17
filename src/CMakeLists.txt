@@ -3,6 +3,7 @@ set(MAIN_SRC
     Calculate.vala
     FileUtils.vala
     Main.vala
+    PBRWindow.vala
 )
 
 set(LIB_BALISTICA_SRC

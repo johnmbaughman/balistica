@@ -84,6 +84,7 @@ namespace Balistica{
 	  // Drag calculation Buttons
 	  private Gtk.Button reset_drag ;
 	  private Gtk.Button solve_drag ;
+	  private Gtk.Button pbr ;
 
 	  // Radio buttons for drag functions
 	  private Gtk.RadioButton rad_g1 ;
@@ -235,7 +236,7 @@ namespace Balistica{
 	  }
 
 	  /**
-	   * Connect the GUI elements to our code so we can play with them
+	   * Connect the GUI elements to our code
 	   */
 	  public void connect_entries() {
 		 // Stored drag calculation's name
@@ -313,6 +314,12 @@ namespace Balistica{
 		 reset_drag.clicked.connect (() => {
 			btnResetDrag_clicked () ;
 		 }) ;
+
+		 pbr = drag_builder.get_object ("btnPBR") as Gtk.Button ;
+		 pbr.clicked.connect (() => {
+			btnPBR_clicked () ;
+		 }) ;
+		 pbr.set_sensitive (false) ;
 
 		 // Setup twist entries & results
 		 miller_diameter = twist_builder.get_object ("txtMDiameter") as Gtk.Entry ;
@@ -410,6 +417,8 @@ namespace Balistica{
 		 drag_results.buffer.text = "" ;
 		 rad_g1.active = true ;
 		 rad_s10.active = true ;
+
+		 pbr.set_sensitive (false) ;
 	  }
 
 	  /**
@@ -426,6 +435,8 @@ namespace Balistica{
 	   * Setup an example calculation
 	   */
 	  private void setExampleCalculation() {
+		 btnResetDrag_clicked () ;
+
 		 calc_name.set_text ("308 Win Match, 168gr Sierra Match King") ;
 		 drag_coefficient.set_text ("0.465") ;
 		 projectile_weight.set_text ("168") ;
@@ -588,6 +599,17 @@ namespace Balistica{
 
 			drag_results.buffer.text += ("%.0f\t%.2f\t%.2f\t%.0f      %.0f    %.2f\t%.2f\t%.2f\n").printf (r, d, m, v, e, wi, wm, t) ;
 		 }
+
+		 pbr.set_sensitive (true) ;
+	  }
+
+	  /**
+	   * Open up the new window to calculate the point blank range (PBR)
+	   */
+	  public void btnPBR_clicked() {
+		 Gtk.Window pbr_win = new Balistica.PBRWindow () ;
+
+		 pbr_win.show_all () ;
 	  }
 
 	  /**
