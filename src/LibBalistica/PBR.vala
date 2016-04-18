@@ -37,7 +37,7 @@ namespace LibBalistica{
 	   *
 	   * @return ??
 	   */
-	  static public int pbr(DragFunction Drag, double DragCoefficient, double Vi, double SightHeight, double VitalSize, out double[] result) {
+	  public static int pbr(DragFunction Drag, double DragCoefficient, double Vi, double SightHeight, double VitalSize, out double[] result) {
 		 result = new double[4] ;
 		 double t = 0 ;
 		 double dt = 0.5 / Vi ;

@@ -448,6 +448,23 @@ namespace Balistica{
 		 wind_angle.set_text ("0") ;
 	  }
 
+	  private LibBalistica.DragFunction getDragFunction() {
+		 // Which version of the drag do they want to calculate?
+		 if( rad_g1.get_active ()){
+			return LibBalistica.DragFunction.G1 ;
+		 } else if( rad_g2.get_active ()){
+			return LibBalistica.DragFunction.G2 ;
+		 } else if( rad_g5.get_active ()){
+			return LibBalistica.DragFunction.G5 ;
+		 } else if( rad_g6.get_active ()){
+			return LibBalistica.DragFunction.G6 ;
+		 } else if( rad_g7.get_active ()){
+			return LibBalistica.DragFunction.G7 ;
+		 } else {
+			return LibBalistica.DragFunction.G8 ;
+		 }
+	  }
+
 	  /**
 	   * Solve the drag function
 	   */
@@ -479,9 +496,6 @@ namespace Balistica{
 		 double tp = 59.0 ;
 		 // Relative Humidity
 		 double rh = 78.0 ;
-
-		 // Selected Drag Function
-		 int df ;
 
 		 name = calc_name.get_text () ;
 		 bc = double.parse (drag_coefficient.get_text ()) ;
@@ -537,26 +551,11 @@ namespace Balistica{
 			debug ("Relative Humidty: %f", rh) ;
 		 }
 
-		 // Which version of the drag do they want to calculate?
-		 if( rad_g1.get_active ()){
-			df = 1 ;
-		 } else if( rad_g2.get_active ()){
-			df = 2 ;
-		 } else if( rad_g5.get_active ()){
-			df = 5 ;
-		 } else if( rad_g6.get_active ()){
-			df = 6 ;
-		 } else if( rad_g7.get_active ()){
-			df = 7 ;
-		 } else {
-			df = 8 ;
-		 }
-
 		 // Create a new solution object
 		 LibBalistica.Solution lsln = new LibBalistica.Solution () ;
 
 		 // Calculate the solution and populate the object
-		 lsln = Calculate.drag (bc, v, sh, w, angle, zero, windspeed, windangle, alt, bar, tp, rh, name, df) ;
+		 lsln = Calculate.drag (bc, v, sh, w, angle, zero, windspeed, windangle, alt, bar, tp, rh, name, getDragFunction ()) ;
 
 		 if( lsln.getSolutionSize () == -1 ){
 			drag_results.buffer.text = "ERROR creating solution results!" ;
@@ -607,7 +606,7 @@ namespace Balistica{
 	   * Open up the new window to calculate the point blank range (PBR)
 	   */
 	  public void btnPBR_clicked() {
-		 Gtk.Window pbr_win = new Balistica.PBRWindow () ;
+		 Gtk.Window pbr_win = new Balistica.PBRWindow (getDragFunction ()) ;
 
 		 pbr_win.show_all () ;
 	  }

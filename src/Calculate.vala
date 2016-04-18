@@ -39,8 +39,7 @@ public class Balistica.Calculate : GLib.Object {
     */
    public static LibBalistica.Solution drag(double bc, double v, double sh, double weight, double angle, double zero,
 											double wspeed, double wangle, double alt, double bar, double tp, double rh,
-											string name, int df) {
-	  LibBalistica.DragFunction d ;
+											string name, LibBalistica.DragFunction df) {
 	  // bore / sight angle
 	  double zero_angle ;
 	  Gee.LinkedList solution = new Gee.LinkedList<LibBalistica.CompUnit ? >() ;
@@ -48,51 +47,20 @@ public class Balistica.Calculate : GLib.Object {
 	  double corrected_bc = LibBalistica.Atmosphere.atm_correct (bc, alt, bar, tp, rh) ;
 
 	  debug ("Corrected BC: %f", corrected_bc) ;
-
-	  switch( df ){
-	  case 1 :
-		 d = LibBalistica.DragFunction.G1 ;
-		 break ;
-
-	  case 2:
-		 d = LibBalistica.DragFunction.G2 ;
-		 break ;
-
-	  case 5:
-		 d = LibBalistica.DragFunction.G5 ;
-		 break ;
-
-	  case 6:
-		 d = LibBalistica.DragFunction.G6 ;
-		 break ;
-
-	  case 7:
-		 d = LibBalistica.DragFunction.G7 ;
-		 break ;
-
-	  case 8:
-		 d = LibBalistica.DragFunction.G8 ;
-		 break ;
-
-	  default:
-		 assert_not_reached () ;
-	  }
-
-	  debug ("Selected Drag Function: %s", d.to_string ()) ;
-
+	  debug ("Selected Drag Function: %s", df.to_string ()) ;
 
 	  // Find the zero angle of the bore relative to the sighting system
-	  zero_angle = LibBalistica.Zero.ZeroAngle (d, corrected_bc, v, sh, zero, 0) ;
+	  zero_angle = LibBalistica.Zero.ZeroAngle (df, corrected_bc, v, sh, zero, 0) ;
 	  debug ("Zero Angle: %f", zero_angle) ;
 
 	  // Generate a solution
-	  solution = LibBalistica.Solve.SolveAll (d, corrected_bc, v, sh, angle, zero_angle, wspeed, wangle, zero) ;
+	  solution = LibBalistica.Solve.SolveAll (df, corrected_bc, v, sh, angle, zero_angle, wspeed, wangle, zero) ;
 	  debug ("Solution Size: %d", solution.size) ;
 
 	  // If this succedes then we have a valid solution
 	  if( solution.size > 0 ){
 		 LibBalistica.Solution lsln = new LibBalistica.Solution.full (solution, name, corrected_bc, sh, weight, v, angle, zero,
-																	  wspeed, wangle, tp, rh, bar, alt, d) ;
+																	  wspeed, wangle, tp, rh, bar, alt, df) ;
 
 		 return lsln ;
 	  } else {

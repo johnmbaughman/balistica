@@ -27,10 +27,14 @@ namespace Balistica{
 	  private Gtk.Entry sight_height ;
 	  private Gtk.Entry vital_zone ;
 
+	  private Gtk.TextView results ;
+
+	  public LibBalistica.DragFunction solved_drag;
+
 	  /**
 	   * Constructor
 	   */ 
-	  public PBRWindow() {
+	  public PBRWindow(LibBalistica.DragFunction drag) {
 		 this.title = "Optimize Point Blank Range" ;
 		 this.window_position = Gtk.WindowPosition.CENTER ;
 
@@ -38,8 +42,10 @@ namespace Balistica{
 		 pbr_builder = Balistica.create_builder ("pbr.glade") ;
 
 		 pbr_builder.connect_signals (null) ;
-		 this = pbr_builder.get_object ("pbr_window") as Gtk.Window ;
+		 var pbr_content = pbr_builder.get_object ("pbr_main") as Gtk.Box ;
+		 this.solved_drag = drag;
 
+		 this.add(pbr_content);
 		 this.show_all () ;
 	  }
 
@@ -56,6 +62,8 @@ namespace Balistica{
 		 inital_vel = pbr_builder.get_object ("txtIntialVel") as Gtk.Entry ;
 		 sight_height = pbr_builder.get_object ("txtSightHeight") as Gtk.Entry ;
 		 vital_zone = pbr_builder.get_object ("txtVitalZone") as Gtk.Entry ;
+
+		 results = pbr_builder.get_object("txtResults") as Gtk.TextView;
 	  }
 
 	  /**
@@ -63,9 +71,9 @@ namespace Balistica{
 	   */
 	  private void setExampleCalculation() {
 		 drag_coef.set_text ("0.465") ;
-		 inital_vel.set_text ("") ;
-		 sight_height.set_text ("") ;
-		 vital_zone.set_text ("") ;
+		 inital_vel.set_text ("2650") ;
+		 sight_height.set_text ("1.6") ;
+		 vital_zone.set_text ("3") ;
 	  }
 
 	  /**
@@ -76,8 +84,12 @@ namespace Balistica{
 		 double iv = double.parse (inital_vel.get_text ()) ;
 		 double sh = double.parse (sight_height.get_text ()) ;
 		 double vz = double.parse (vital_zone.get_text ()) ;
+		 double[] result;
 
-		 LibBalistica.PBR.pbr (dc, iv, sh, vz) ;
+		 LibBalistica.PBR.pbr (this.solved_drag, dc, iv, sh, vz, out result) ;
+
+		 results.buffer.text = "";
+		 results.buffer.text += ("Near Zero: %f yards\nFar Zero: %f yards\nMinimum PBR: %f yards\nMaximum PBR: %f yards\nSight-in at 100yds: %.2f High").printf(result[0], result[1], result[2],result[3],result[4]/100.0);
 	  }
 
    }
