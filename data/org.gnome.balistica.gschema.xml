@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <schemalist>
-
-    <schema id='org.gnome.balistica' path='/org/gnome/balistica/'>
-
-        <key name="window-maximise" type="b">
-            <default>false</default>
-            <summary>maximize window</summary>
+    <schema id="org.gnome.balistica" path="/org/gnome/balistica/" gettext-domain="gnome-balistica">
+        <key name="width" type="i">
+            <default>700</default>
+            <summary>The width of the window</summary>
+            <description>The width of the main window in pixels.</description>
         </key>
-
-        <key name="window-width" type="i">
-            <default>735</default>
-            <summary>width of window</summary>
-            <description>The last recorded width of the application window.</description>
+        <key name="height" type="i">
+            <default>550</default>
+            <summary>The height of the window</summary>
+            <description>The height of the main window in pixels.</description>
         </key>
-
-        <key name="window-height" type="i">
-            <default>750</default>
-            <summary>height of window</summary>
-            <description>The last recorded height of the application window.</description>
+        <key name="save-directory" type="s">
+            <summary>The directory to open the save game dialog in</summary>
+            <description>The directory to open the save game dialog in</description>
         </key>
-
     </schema>
-
 </schemalist>

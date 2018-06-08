@@ -1,3 +1,26 @@
+Version 1.3
+============================
+* Switch to Meson build system
+* Application wide logging facilities
+* Added 128x128 icon
+* Add ability to clear log file
+* Removed libbalistica source and created as a seperate library
+* Undo right-side tabs
+* Remove all database references
+
+Version 1.2
+============================
+* Corrected PBR calculation
+* The main page's tabs now are on the right side instead of the top 
+  in anticipation of the database
+
+Version 1.1
+============================
+* Compute the optimized point blank range (PBR)
+* Can now export drag calculation results to HTML
+* More modern code approach using Glade files and signals
+* Various minor bug fixes & improvements
+
 Version 1.0
 ============================
 * First offical release!
